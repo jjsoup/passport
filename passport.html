@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပတ်စပို့စ် သက်တမ်းတိုး / အပျောက်</title>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <style>
+        body {
+            font-family: 'Pyidaungsu', 'Myanmar Text', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        /* Sticky Header Section - Width အပြည့်နှင့် နောက်ခံအရောင် */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 100;
+            width: 100%;
+            padding: 10px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 0 10px 10px 10px;
+            box-sizing: border-box;
+        }
+
+        .website-title {
+            color: #000000;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0 10px;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .search-box button {
+            padding: 8px 12px;
+            background-color: transparent;
+            color: #2563eb;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .search-box button:hover {
+            color: #1d4ed8;
+        }
+        .search-box .clear-btn {
+            background-color: transparent;
+            color: #64748b;
+            font-size: 16px;
+            padding: 4px 8px;
+        }
+        .search-box .clear-btn:hover {
+            color: #475569;
+        }
+        
+        .content-wrapper {
+            padding: 0 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3a8a;
+            font-size: 14px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        h2 span.update-text {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: normal;
+            display: block;
+            margin-top: 6px;
+        }
+        h2 span.update-text a {
+            color: #2563eb;
+            text-decoration: underline;
+            margin-left: 6px;
+        }
+        h2 span.update-text a:hover {
+            color: #1d4ed8;
+        }
+        .date-section {
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 4px 2px; 
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+        td.name-col {
+            text-align: left; 
+            padding-left: 6px;
+            white-space: normal; 
+        }
+        th {
+            background-color: #e2e8f0;
+            color: #1e293b;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .source-footer {
+            text-align: right;
+            margin-top: 6px;
+            margin-bottom: 4px;
+        }
+        .source-footer a {
+            color: #2563eb;
+            font-size: 12px;
+            text-decoration: underline;
+        }
+        .source-footer a:hover {
+            color: #1d4ed8;
+        }
+        /* Watermark style text note */
+        .search-watermark-note {
+            text-align: right;
+            font-size: 10px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+        .loading, .no-data {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Header - Screen Width အပြည့်နှင့် နောက်ခံအရောင် -->
+    <div class="sticky-header">
+        <div class="website-title">ပတ်စပို့စ် သက်တမ်းတိုး / အပျောက်</div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="အမည် (သို့) Passport နံပါတ်..." onkeyup="handleSearchInput(event)">
+            <button onclick="handleSearch()">ရှာမည်</button>
+            <button class="clear-btn" onclick="clearSearch()" title="ပြန်စရန်">&#8635;</button>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <div class="content-wrapper" id="content-area">
+            <div class="loading">ဒေတာများကို ရယူနေပါသည်...</div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://zbdvxmtmstgoqbixtwkp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpiZHZ4bXRtc3Rnb3FiaXh0d2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzI2MzIsImV4cCI6MjEwMTkwODYzMn0.NLzGo-PGXbXTSTljwSZaCtcptAPWZvB5fBsyZmflWq4';
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let allPassportData = [];
+
+        async function fetchAllData() {
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = '<div class="loading">ဒေတာများကို ရယူနေပါသည်...</div>';
+
+            try {
+                // ဒေတာအားလုံးကို တစ်ခါတည်း ယူမည်
+                const { data, error } = await _supabase
+                    .from('passports')
+                    .select('*')
+                    .order('c_date', { ascending: false });
+
+                if (error) throw error;
+
+                allPassportData = data || [];
+                renderTables(allPassportData);
+
+            } catch (err) {
+                console.error("Error fetching data:", err);
+                contentArea.innerHTML = `<p style="text-align:center; color:red; font-size:12px;">အမှားအယွင်း ရှိနေပါသည်: ${err.message}</p>`;
+            }
+        }
+
+        function renderTables(dataList) {
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = ''; 
+
+            if (!dataList || dataList.length === 0) {
+                contentArea.innerHTML = '<div class="no-data">ရှာဖွေတွေ့ရှိသော ဒေတာ မရှိပါ။</div>';
+                return;
+            }
+
+            const groupedByDate = dataList.reduce((acc, row) => {
+                const dateKey = row.c_date ? row.c_date.split('T')[0] : 'ရက်စွဲမရှိ';
+                if (!acc[dateKey]) {
+                    acc[dateKey] = [];
+                }
+                acc[dateKey].push(row);
+                return acc;
+            }, {});
+
+            for (const [dateVal, rows] of Object.entries(groupedByDate)) {
+                // ရက်စွဲတစ်ခုချင်းစီအောက်ရှိ စာရင်းများကို no အလိုက် အငယ်မှ အကြီး (1, 2, 3...) သို့ အသေအချာ စီပေးမည်
+                rows.sort((a, b) => {
+                    let numA = parseFloat(a.no) || 0;
+                    let numB = parseFloat(b.no) || 0;
+                    return numA - numB;
+                });
+
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'date-section';
+
+                let rawDate = rows[0].up_date || rows[0].c_date || '';
+                let dateOnly = rawDate ? rawDate.split('T')[0] : '';
+
+                const sourceLink = rows[0].source || rows[0].link || '';
+                let topLinkHtml = sourceLink ? ` <a href="${sourceLink}" target="_blank">သံရုံးမူရင်း ↗</a>` : '';
+
+                const titleHeading = document.createElement('h2');
+                titleHeading.innerHTML = `${dateVal} တွင်သံရုံးသို့လာရောက်နိုင်သူများစာရင်း
+                                          <span class="update-text">last update: ${dateOnly}${topLinkHtml}</span>`;
+                sectionDiv.appendChild(titleHeading);
+
+                const tableWrapper = document.createElement('table');
+                tableWrapper.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>စဉ်</th>
+                            <th>အမည်</th>
+                            <th>နိုင်ငံကူးလက်မှတ်</th>
+                            <th>ပါမစ်သက်တမ်း</th>
+                            <th>မှတ်ချက်</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map((item) => `
+                            <tr>
+                                <td>${item.no || ''}</td>
+                                <td class="name-col">${item.name || ''}</td>
+                                <td><b>${item.passport || ''}</b></td>
+                                <td>${item.exp_permit || ''}</td>
+                                <td>${item.note || ''}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+
+                sectionDiv.appendChild(tableWrapper);
+
+                if (sourceLink) {
+                    const footerDiv = document.createElement('div');
+                    footerDiv.className = 'source-footer';
+                    footerDiv.innerHTML = `<a href="${sourceLink}" target="_blank">သံရုံးမှမူရင်းလင့်ခ် ↗</a>`;
+                    sectionDiv.appendChild(footerDiv);
+
+                    const watermarkNote = document.createElement('div');
+                    watermarkNote.className = 'search-watermark-note';
+                    watermarkNote.innerText = 'သံရုံးမှုရင်းလင့်ခ်ကိုနိပ်၍ မြန်မာသံရုံး တရားဝင် Facebook page တွင် ယခုရရှိထား​သော အဖြေမှ စဥ်(နံပါတ်စဥ်) ဖြင့် အလွယ်တကူရှာဖွေ စစ်ဆေးနိုင်ပါသည် ။';
+                    sectionDiv.appendChild(watermarkNote);
+                }
+
+                contentArea.appendChild(sectionDiv);
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!query) {
+                renderTables(allPassportData);
+                return;
+            }
+
+            const filtered = allPassportData.filter(item => {
+                const name = (item.name || '').toLowerCase();
+                const passport = (item.passport || '').toLowerCase();
+                return name.includes(query) || passport.includes(query);
+            });
+
+            renderTables(filtered);
+        }
+
+        function handleSearchInput(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            renderTables(allPassportData);
+        }
+
+        window.onload = fetchAllData;
+    </script>
+
+</body>
+</html>

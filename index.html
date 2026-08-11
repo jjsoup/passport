@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>မလေးရှား ကွာလာလမ်ပူ သံရုံး Facebook Page မှ အချက်အလက်များကို ကူးယူဖော်ပြထားပါသည်</title>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Pyidaungsu', 'Myanmar Text', sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ထိပ်ဆုံးမှ အပြာရောင် Modern Header with Flexbox */
+        .top-header-div {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: fadeInDown 0.6s ease-in-out;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Social Icons Style */
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icons a {
+            color: #ffffff;
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .social-icons a:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .social-icons a.fb-icon:hover {
+            color: #1877f2;
+        }
+
+        .social-icons a.wa-icon:hover {
+            color: #25d366;
+        }
+
+        /* Banner Image Container */
+        .image-container {
+            width: 100%;
+            max-height: 240px;
+            overflow: hidden;
+            background-color: #e2e8f0;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Main Container */
+        .container {
+            flex: 1;
+            max-width: 600px;
+            width: 90%;
+            margin: 25px auto;
+            padding: 25px 20px;
+            background-color: #f1f5f9;
+            border-radius: 0px;
+            box-shadow: none;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeInUp 0.6s ease-in-out;
+        }
+
+        .main-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-align: center;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        /* Button Group & Modern Clean UI Style */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 20px;
+            background: #ffffff;
+            color: #1e3a8a;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            box-sizing: border-box;
+            transition: all 0.25s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border-color: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 58, 138, 0.2);
+        }
+
+        /* အသိပေးချက်ရယူရန် Button အတွက် သီးသန့် အသားပေးအရောင် */
+        .nav-btn.noti-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.25);
+        }
+
+        .nav-btn.noti-btn:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 6px 14px rgba(245, 158, 11, 0.35);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Footer Watermark */
+        .watermark {
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.6;
+            padding: 18px 15px;
+            border-top: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            margin-top: auto;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ထိပ်ဆုံးအပြာရောင် div (JJsoup နှင့် Social Icons) -->
+    <div class="top-header-div">
+        <div class="header-title">JJsoup</div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/share/1HbwUWFkdZ/" target="_blank" class="fb-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://wa.me/60189517356" target="_blank" class="wa-icon" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <!-- ပုံ (bg.jpg) ထည့်သွင်းထားသောနေရာ -->
+    <div class="image-container">
+        <img src="bg.jpg" alt="Background Image">
+    </div>
+
+    <div class="container">
+        <div class="main-title">
+            မလေးရှား ကွာလာလမ်ပူ သံရုံး Facebook Page မှ အချက်အလက်များကို ကူးယူဖော်ပြထားပါသည်
+        </div>
+
+        <div class="button-group">
+            <a href="noti.html" class="nav-btn noti-btn">🔔 အသိပေးချက်ရယူထားရန်</a>
+            <a href="passport.html" class="nav-btn">ပတ်စပို့စ် သက်တမ်းတိုး / အပျောက် သံရုံးသွားရောက်ရမည့် ရက်ချိန်းကြည့်ရန်</a>
+            <a href="camp.html" class="nav-btn">Camp စိစစ်ပြီးစာရင်း</a>
+            <a href="ci.html" class="nav-btn">Camp မှ မြန်မာပြည်သို့ ပြန်လည်ပို့ဆောင်မည့်စာရင်း (C of I)</a>
+        </div>
+    </div>
+
+    <div class="watermark">
+        ယခု website သည် မလေးရှား ကွာလာလမ်ပူ မြန်မာသံရုံးမှ တည်ဆောက်ထားခြင်းမဟုတ်ပါ ။ မြန်မာပြည်သားများအနေဖြင့် အသုံးပြုရလွယ်ကူရန် ရည်ရွယ်၍ မြန်မာသံရုံး page မှ အချက်အလက်များကို ကူးယူဖော်ပြထားခြင်းသာ ဖြစ်ပါသည် ။ မြန်မာပြည်သားများအနေဖြင့် သံရုံးသို့ သွားရောက်ရမည့်နေ့ရက်ကို လွယ်ကူစွာကြည့်ရှုနိုင်ရန်အတွက်သာ ရည်ရွယ်ပါသည် ။
+    </div>
+
+</body>
+</html>
